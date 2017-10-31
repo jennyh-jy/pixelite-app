@@ -68,7 +68,7 @@ class PhotoGrid extends Component {
     super(props);
     console.log('THIS IS THE ALLPHOTOS FROM PROPS : ', this.props.allPhotosla);
     this.state = {
-      allPhotos: this.changeToSlide(this.props.allPhotosla, this.props.datesFromNewStory),
+      // allPhotos: this.changeToSlide(this.props.allPhotosla, this.props.datesFromNewStory),
       currentPhotoUrl: '',
       currentPhotoIndex: 0,
       photoModalVisible: false,
@@ -76,14 +76,14 @@ class PhotoGrid extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      allPhotos: this.changeToSlide(nextProps.allPhotosla, nextProps.datesFromNewStory),
-    });
+    // this.setState({
+    //   allPhotos: this.changeToSlide(nextProps.allPhotosla, nextProps.datesFromNewStory),
+    // });
   }
 
   changeToSlide(object, dates) {
     console.log('THIS IS THE OBJECT :', object);
-    console.log('ThIS IS THE DATE : ', dates)
+    console.log('THESE ARE THE DATES : ', dates)
     const result = [];
     dates.forEach(date => {
       object[date].forEach(({ url, location }) => {
@@ -99,12 +99,14 @@ class PhotoGrid extends Component {
   }
 
   onPageChange(index) {
-    const nextCurrentPhotoUrl = this.state.allPhotos[index].source.uri;
-    const nextCurrentPhotoPlace = this.state.allPhotos[index].source.locationName;
+    const allPhotos = this.changeToSlide(this.props.allPhotosla, this.props.datesFromNewStory);
+    const nextCurrentPhotoUrl = allPhotos[index].source.uri;
+    const nextCurrentPhotoPlace = allPhotos[index].source.locationName;
     this.props.photoGridOnPageChange(nextCurrentPhotoUrl, nextCurrentPhotoPlace);
   }
 
   photoPopupToggle(currentPhotoUrl, currentPhotoLocation) {
+    const allPhotos = this.changeToSlide(this.props.allPhotosla, this.props.datesFromNewStory);
     const getIndexFromSlide = (array) => {
       let index;
       array.find((element,i) => {
@@ -113,17 +115,14 @@ class PhotoGrid extends Component {
           return true;
         }
       })
-      console.log('THIS IS INSDE! ARRAY' , array, ' STATES CURRENT URL ', currentPhotoUrl );
       return index;
     }
-    console.log('THIS IS GETTING CHENGESD!!! : ', getIndexFromSlide(this.state.allPhotos));
-
     this.setState({
       currentPhotoUrl,
-      currentPhotoIndex: getIndexFromSlide(this.state.allPhotos),
+      currentPhotoIndex: getIndexFromSlide(allPhotos),
       photoModalVisible: !this.state.photoModalVisible,
     });
-    this.props.photoGridTogglePhotoPopup(currentPhotoUrl, currentPhotoLocation, this.state.allPhotos);
+    this.props.photoGridTogglePhotoPopup(currentPhotoUrl, currentPhotoLocation, allPhotos);
   }
 
   searchPlacesPopupToggle() {
@@ -137,17 +136,11 @@ class PhotoGrid extends Component {
       Alert.alert(
         'Cannot delete photo',
         'You should have at least one photo in your story',
-        [
-          { text: 'OK', onPress: () => console.log('OK Pressed')}
-        ]
+        [{ text: 'OK', onPress: () => console.log('OK Pressed')}]
       );
-      return;
+      return false;
     } else {
-      console.log('WILL DELETE')
       this.props.photoGridDeletePhoto(currentPhotoUrl);
-    }
-    if (this.props.photosList.length) {
-      this.photoPopupToggle();
     }
   }
 
@@ -347,6 +340,7 @@ class PhotoGrid extends Component {
   }
 
   render() {
+    console.log('photo modal visible?', this.state.photoModalVisible)
     return (
       <View>
         {this.renderGrid()}
@@ -408,6 +402,15 @@ class PhotoGrid extends Component {
                       text: 'Yes',
                       onPress: () => {
                         this.deletePhoto(this.props.currentPhotoUrl);
+                        // if (this.props.photosList.length && result !== false) {
+                        //   console.log('is the result false? :', result)
+                        //   this.setState({
+                        //     photoModalVisible: false,
+                        //   })
+                        // }
+                        // if (this.props.photosList.length && result) {
+                        //   this.photoPopupToggle();
+                        // }
                       },
                     }]
                   )}
@@ -416,7 +419,7 @@ class PhotoGrid extends Component {
 {/* Gallery Starts */}
                 <Gallery
                   style={{ backgroundColor: '#2d2d2d' }}
-                  images={this.state.allPhotos}
+                  images={this.changeToSlide(this.props.allPhotosla, this.props.datesFromNewStory)}
                   initialPage={this.state.currentPhotoIndex}
                   onPageSelected={(index) => this.onPageChange(index)}
                 />

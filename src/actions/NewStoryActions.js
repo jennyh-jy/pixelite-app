@@ -1,7 +1,6 @@
 
 import * as _ from 'lodash';
 import { AWS_ACCESS_KEY, AWS_SECRET_KEY } from '../../apis';
-// import { API_KEY, API_SECRET } from 'react-native-dotenv'
 import { RNS3 } from 'react-native-aws3';
 import {
   NEWSTORY_CREATE_STORY,
@@ -17,39 +16,6 @@ import {
 } from './types';
 
 
-const updateStory = (dispatch, updatedStory) => {
-  console.log('updatesStory: ', updatedStory);
-  dispatch({
-    type: NEWSTORY_UPDATED_STORIES,
-    payload: updatedStory,
-  });
-};
-
-export const clearEverything = () => {
-  return {
-    type: NEWSTORY_CLEAR_EVERYTHING,
-  }
-};
-
-export const newstoryToggleStory = () => {
-  return {
-    type: NEWSTORY_TOGGLE_STORY,
-  }
-};
-
-export const newStoryToggleStoryMap = (isStoryMapClicked) => {
-  return {
-    type: NEWSTORY_TOGGLE_STORY_MAP,
-    payload: isStoryMapClicked,
-  }
-}
-
-export const newStoryToggleEditable = (isTextEditable) => {
-  return {
-    type: NEWSTORY_TOGGLE_TEXT_EDITABLE,
-    payload: isTextEditable,
-  }
-}
 const options = {
   keyPrefix: "uploads/",
   bucket: "pixelite-s3-oregon",
@@ -58,6 +24,7 @@ const options = {
   secretKey: AWS_SECRET_KEY,
   successActionStatus: 201
 }
+
 const saveImageToS3 = (uri, user) => {
   const file = {
     uri: `file://${uri}`,
@@ -69,6 +36,14 @@ const saveImageToS3 = (uri, user) => {
       throw new Error("Failed to upload image to S3");
   });
 }
+
+const updateStory = (dispatch, updatedStory) => {
+  console.log('updatesStory: ', updatedStory);
+  dispatch({
+    type: NEWSTORY_UPDATED_STORIES,
+    payload: updatedStory,
+  });
+};
 
 export const newStoryCreateStory = (props) => {
   const items = _.flattenDeep(Object.values(props.selectedPhotos));
@@ -114,6 +89,32 @@ export const newStoryCreateStory = (props) => {
       });
   };
 };
+
+export const clearEverything = () => {
+  return {
+    type: NEWSTORY_CLEAR_EVERYTHING,
+  }
+};
+
+export const newStoryToggleStory = () => {
+  return {
+    type: NEWSTORY_TOGGLE_STORY,
+  }
+};
+
+export const newStoryToggleStoryMap = (isStoryMapClicked) => {
+  return {
+    type: NEWSTORY_TOGGLE_STORY_MAP,
+    payload: isStoryMapClicked,
+  }
+}
+
+export const newStoryToggleEditable = (isTextEditable) => {
+  return {
+    type: NEWSTORY_TOGGLE_TEXT_EDITABLE,
+    payload: isTextEditable,
+  }
+}
 
 export const newStoryChangeTitleInput = (titleValue) => {
   return {

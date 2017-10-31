@@ -24,11 +24,7 @@ class NewStory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
-      image: null,
-      images: null,
       user: null,
-      sendData: null,
       cityEntered: false,
     };
   }
@@ -48,7 +44,8 @@ class NewStory extends Component {
   }
 
   pickMultiple() {
-    if (this.state.cityEntered === false) {
+    const firstAdd = this.props.dates.length === 0 ? true : false; // Is it the first time?
+    if ((this.state.cityEntered === false && firstAdd)) {
       Alert.alert(
         'Waaaaiiittt a moment',
         'Have you forgot to select a city? \nTell others wonders of your location!'
@@ -89,8 +86,6 @@ class NewStory extends Component {
         });
 
         console.log('From android : ',  nextSelectedPhotos);
-
-        const firstAdd = this.props.dates.length === 0 ? true : false; // Is it the first time?
         this.props.newStoryGetPhotos(nextSelectedPhotos, firstAdd);
       }).catch(err => console.log(err));
     } else {
@@ -112,7 +107,7 @@ class NewStory extends Component {
           const { timestamp } = allPhotos.find((item) => {
             return item.node.image.filename === photo.filename;
           }).node;
-          console.log('this is timestamp : ', timestamp);
+
           return {
             filename: photo.filename,
             url: photo.path,
@@ -135,7 +130,6 @@ class NewStory extends Component {
           }
         });
 
-        const firstAdd = this.props.dates.length === 0 ? true : false; // Is it the first time?
         this.props.newStoryGetPhotos(nextSelectedPhotos, firstAdd);
       }).catch(err => console.log(err));
     }
@@ -150,12 +144,18 @@ class NewStory extends Component {
   }
 
   toggleStory() {
-    this.props.newstoryToggleStory();
+    this.props.newStoryToggleStory();
   }
 
   cancelNewStory() {
     this.props.navigation.goBack();
     this.props.clearEverything();
+  }
+
+  cancelCityEntered() {
+    this.setState({
+      cityEntered: false,
+    })
   }
 
   render() {
@@ -205,6 +205,8 @@ class NewStory extends Component {
           </Text>
           {/* FIRST PAGE GOOGLE autocomplete */}
           <GooglePlacesAutocomplete
+            ref={(googleAuto) => this.googleAuto = googleAuto }
+            cancelCityEntered={this.cancelCityEntered.bind(this)}
             placeholder='Search cities'
             minLength={2} // minimum length of text to search
             autoFocus={false}

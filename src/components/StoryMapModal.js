@@ -31,7 +31,7 @@ export default class StoryMapModal extends React.Component {
   // }
 
   onRegionChange(region) {
-    this.setState({ region: this.state.region });
+    this.setState({ region: this.props.region });
   }
 
   render() {

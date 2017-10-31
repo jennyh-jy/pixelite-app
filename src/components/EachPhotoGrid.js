@@ -401,10 +401,10 @@ class EachPhotoGrid extends Component {
                       bottom: 0, zIndex: 10, width: '100%', height: 40, backgroundColor: '#1d1d1d'
                     }}
                   >
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       style={{ flexDirection: 'row' }}
                       onPress={() => this.searchPlacesPopupToggle()}
-                    >
+                    > */}
                       <Icon
                         type="simple-line-icon"
                         name="location-pin"
@@ -414,7 +414,7 @@ class EachPhotoGrid extends Component {
                       <Text style={{ fontFamily: 'Avenir', color: 'white', marginLeft: 5 }}>
                         {this.props.currentPhotoPlace}
                       </Text>
-                    </TouchableOpacity>
+                    {/* </TouchableOpacity> */}
                   </View>
                 }
             </View>

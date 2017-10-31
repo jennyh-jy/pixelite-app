@@ -3,14 +3,15 @@ import React, { Component } from 'react';
 import { addNavigationHelpers } from 'react-navigation';
 import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
+import ReduxThunk from 'redux-thunk';
 import firebase from 'firebase';
-import ReduxThunk from 'redux-thunk'; // middleware
+
 import { GOOGLE_FIREBASE_API_KEY } from './apis';
-import reducers from './src/reducers'; // getting combined reducers
+import reducers from './src/reducers';
 import { RootNavigator } from './src/Router';
 import NavigatorService from './src/Navigator';
 
-// --------------- Navigation --------------
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const navReducer = (state, action) => {

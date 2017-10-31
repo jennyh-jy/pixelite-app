@@ -39,9 +39,9 @@ const getTravelPeriod = (dates) => {
     const early = dates[0].split(' ').map((element, i) => { if (i === 0 || i === 2) return Number(element); return element; });
     const late = dates[dates.length - 1].split(' ').map((element, i) => { if (i === 0 || i === 2) return Number(element); return element; });
 
-    if(early[2] === late[2] && early[1] === late[1]) {
+    if (early[2] === late[2] && early[1] === late[1]) {
       return `${early[0]} - ${late[0]} ${late[1]} ${late[2]}`;
-    } else if( early[2] === late[2]) {
+    } else if (early[2] === late[2]) {
       return `${early[0]} ${early[1]} - ${late[0]} ${late[1]} ${late[2]}`;
     } else {
       return `${early.join(' ')} - ${late.join(' ')}`;
@@ -68,52 +68,97 @@ const changeToSlide = (dates, selectedPhotos) => {
       })
     })
   })
-  console.log("THIS IS ALLPHOTOS : ", result);
   return result;
 }
 
+// const deletePhoto = (state, photoUrl) => {
+//   const selectedPhotos = state.selectedPhotos;
+//   const updatedSelectedPhotos = {};
+//   const allEachPhotos = Object.values(updatedSelectedPhotos);
+//   const newLocations = [...state.locations];
+//   let deleteLocation = null;
+//
+//   for (let date in selectedPhotos) {
+//     const tuple = [];
+//     selectedPhotos[date].forEach(photo => {
+//       if (photo.url === photoUrl) {
+//         if (photo.location) {
+//           state.locations.forEach((location, i) => {
+//             if (location.placeName === deleteLocation.placeName) {
+//               newLocations.splice(i, 1);
+//             }
+//           })
+//         }
+//       } else {
+//         tuple.push(photo);
+//       }
+//     })
+//     if (tuple.length !== 0) {
+//       updatedSelectedPhotos[date] = tuple;
+//     }
+//   }
+//
+//   const nextDates = compareDates(updatedSelectedPhotos);
+//   const nextTravelPeriod = getTravelPeriod(nextDates);
+//
+//   console.log("UPDATES : ", updatedSelectedPhotos);
+//
+//   return {
+//     selectedPhotos: updatedSelectedPhotos,
+//     dates: nextDates,
+//     //allPhotos: changeToSlide(nextDates, updatedSelectedPhotos),
+//     locations: newLocations,
+//     travelPeriod: nextTravelPeriod,
+//     coverPhotoUrl: getInitialCoverPhoto(updatedSelectedPhotos, nextDates),
+//   }
+// };
+
 const deletePhoto = (state, photoUrl) => {
-  const selectedPhotos = state.selectedPhotos;
-  const updatedSelectedPhotos = {};
+  const updatedSelectedPhotos = Object.assign({}, state.selectedPhotos);
+  const dates = Object.keys(updatedSelectedPhotos);
   const allEachPhotos = Object.values(updatedSelectedPhotos);
   const newLocations = [...state.locations];
+  let coverPhotoUrl = state.coverPhotoUrl;
   let deleteLocation = null;
 
-  for(let date in selectedPhotos) {
-    const tuple = [];
-    selectedPhotos[date].forEach( photo => {
-      if(photo.url === photoUrl) {
-        if(photo.location) {
-          state.locations.forEach((location, i) => {
-            if (location.placeName === deleteLocation.placeName) {
-              newLocations.splice(i, 1);
-            }
-          })
-        }
-      } else {
-        tuple.push(photo);
+  allEachPhotos.forEach((eachPhotos, index) => {
+    const foundPhotoIndex = eachPhotos.findIndex((photo) => photo.url === photoUrl);
+    if (foundPhotoIndex !== -1) {
+      if (eachPhotos[foundPhotoIndex].location) {
+        deleteLocation = eachPhotos[foundPhotoIndex].location;
+      }
+      eachPhotos.splice(foundPhotoIndex, 1);
+      if (!eachPhotos.length) {
+        delete updatedSelectedPhotos[dates[index]];
+        console.log('date deleted!');
+      }
+    }
+  });
+
+  if (deleteLocation) {
+    state.locations.forEach((location, i) => {
+      if (location.placeName === deleteLocation.placeName) {
+        newLocations.splice(i, 1);
       }
     })
-    if(tuple.length !== 0) {
-      updatedSelectedPhotos[date] = tuple;
-    }
   }
-
 
   const nextDates = compareDates(updatedSelectedPhotos);
   const nextTravelPeriod = getTravelPeriod(nextDates);
+  if (state.coverPhotoUrl === photoUrl) {
+    coverPhotoUrl = getInitialCoverPhoto(updatedSelectedPhotos, nextDates);
+  }
 
-  console.log("UPDATES : ",updatedSelectedPhotos);
-
+  console.log("UPDATES : ", updatedSelectedPhotos);
   return {
     selectedPhotos: updatedSelectedPhotos,
     dates: nextDates,
-    //allPhotos: changeToSlide(nextDates, updatedSelectedPhotos),
     locations: newLocations,
     travelPeriod: nextTravelPeriod,
-    coverPhotoUrl:  getInitialCoverPhoto(updatedSelectedPhotos, nextDates),
+    coverPhotoUrl,
   }
 };
+
 
 const compareDates = (selectedPhotos) => {
   const dates = Object.keys(selectedPhotos);
@@ -147,7 +192,6 @@ const updateLocation = (state, action) => {
   return {
     selectedPhotos: newSelectedPhotos,
     locations: nextLocations,
-    //allPhotos: changeToSlide(state.dates, newSelectedPhotos)
   };
 }
 
@@ -162,14 +206,16 @@ const newStoryChange = (state, action) => {
       const nextArePhotosSelected = firstAdd
         ? !state.arePhotosSelected
         : state.arePhotosSelected;
-      const nextCoverPhotoUrl = getInitialCoverPhoto(nextSelectedPhotos, nextDates);
+      let nextCoverPhotoUrl = state.coverPhotoUrl;
+      if (firstAdd) {
+        nextCoverPhotoUrl = getInitialCoverPhoto(nextSelectedPhotos, nextDates);
+      }
       return {
         selectedPhotos: nextSelectedPhotos,
         dates : nextDates,
         travelPeriod: nextTravelPeriod,
         arePhotosSelected: nextArePhotosSelected,
         coverPhotoUrl: nextCoverPhotoUrl,
-        //allPhotos: changeToSlide(nextDates, nextSelectedPhotos),
       };
     case NEWSTORY_GOOGLE_PLACES_AUTOCOMPLETE:
       const { selectedCity, selectedCountry, selectedCoordinates } = action.payload;
