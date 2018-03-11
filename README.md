@@ -1,62 +1,46 @@
 # Introduction
 
-This app aims to provide unique features to travel enthusiasts. It provides features to easily manipulate a "story" out of selected photos, while providing a platform to share your happy travel memories.
+Pixelite is a React Native app that provides unique features to travel enthusiasts. You can easily create a travel story out of selected photos, share your stories on the platform, and search for other stories when you're planning your next adventure.
 
-In short, this is a react-native travel stories sharing application with following features:
- - share and store travel stories
- - automatically image tagging system
- - creates travel stories conveniently
- - supports both iOS and Android
+These are some of the features Pixelite can offer:
 
+- create travel stories with a timeline and places you've visited only with a few simple steps
+- make a personalized world map with all the places you've travelled to
+- check out other people's stories by searching for a location(city, country, or name of a specific place) and/or a keyword(e.g. surfing, mountain, food) that you're interested in
+ 
 ### Demo
-
-bit.ly/pixelite_demo
-
-# Getting Started
-
-1. git clone https://github.com/TeamPixelite/Pixelite
-
-2. run **npm install** to download the packages
-
-3. run **react-native link**
-
-4. depending on your platform
-- iOS: run **react-native run-ios**
-- Android: run **react-native run-android**
-
-# Attention
+https://bit.ly/pixelite_demo
 
 
-## Client Side
+# Getting started
 
-This app utilizes multiple API keys which are used to access login and provide geo location informations.
-Inside project folder create a javascript file named **"apis.js"** with following template. You will need to get your own api keys from Google and Amazon Web Service.
+1. Install React Native CLI following the instructions here: https://facebook.github.io/react-native/docs/getting-started.html
+
+2. Run **npm install** to download the packages
+
+3. Run **react-native link**
+
+4. Run the following command depending on your platform
+- iOS: **react-native run-ios**
+- Android: **react-native run-android**
+
+
+## Client-side
+
+Pixelite utilizes multiple API keys that are used to access login and geolocation information. In order to run the app, create a file named **"apis.js"** under the project folder with the following template. You will need to get your own API keys from Google and AWS.
 
 <pre><code>
 exports.GOOGLE_PLACES_API_KEY = "*****************************";
 exports.GOOGLE_FIREBASE_API_KEY = "*****************************";
 exports.AWS_ACCESS_KEY = "*****************************";
 exports.AWS_SECRET_KEY = "*****************************";
+
 </pre></code>
 
-### Only Android
 
-Inside android > app > src > main > **AndroidManifest.xml**
+## Server-side
 
-inside ```<application>```
-add
-```
-<meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="*******************************"
-        />
-```
-
-fill out the key value with your own GOOGLE_GEOCODING_API_KEY
-
-## Server Side
-
-1. Go to PixeliteServer -> config, and create file named **"dev.js"** with following template.
+Go to PixeliteServer > config, and create a file named **"dev.js"** with the following template. You can get your MongoDB URI after going through the steps in 'Quick-Start Guide to mLab'(http://docs.mlab.com/).
 
 ```
 module.exports = {
@@ -64,13 +48,7 @@ module.exports = {
 };
 ```
 
-Search mongolab in google (http://docs.mlab.com/), after following quick-start quide to mlab, enter MongoDB URI in step3.
 
-2. Configure the AWS
-http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
+# Any questions or feedback?
 
-## Trouble shooting
-
-Several trouble shooting cases
-- Android: cannot delete folder or path
-https://stackoverflow.com/questions/35674066/errorexecution-failed-for-task-appprocessdebugresources-java-io-ioexcept
+Feel free to drop us an email at pixelite1010@gmail.com!
