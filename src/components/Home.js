@@ -214,7 +214,7 @@ export default class Home extends React.Component {
       location,
     }
 
-    axios.post('http://52.78.128.96:5000/searchQuery', sendInfo)
+    axios.post('http://localhost:5000/searchQuery', sendInfo)
     .then(res => {
       console.log(res);
       this.setState({

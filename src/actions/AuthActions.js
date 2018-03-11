@@ -49,7 +49,7 @@ const signUpUserSuccess = (dispatch, user, name) => {
   }
   console.log(sendInfo);
 
-  return axios.post('http://52.78.128.96:5000/updateUserProfile', sendInfo)
+  return axios.post('http://localhost:5000/updateUserProfile', sendInfo)
     .then(() => NavigatorService.navigate('SignedIn'))
     .then(() => {
       updateStories(dispatch, [], name);
@@ -68,12 +68,13 @@ const loginUserSuccess = (dispatch, user) => {
   const sendInfo = {uid: user.uid}
 
   // RouterComponent -> Scen key ="List"
-  return axios.post('http://52.78.128.96:5000/updateUserProfile', sendInfo)
+  return axios.post('http://localhost:5000/updateUserProfile', sendInfo)
     .then((res) => {
       console.log(res.data);
       updateStories(dispatch, res.data.stories, res.data.profile.name);
     })
-    .then(() => NavigatorService.navigate('SignedIn'));
+    .then(() => NavigatorService.navigate('SignedIn'))
+    .catch(err => console.log(err));
 };
 
 export const nameChanged = (text) => {

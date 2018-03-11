@@ -70,7 +70,7 @@ export const newStoryCreateStory = (props) => {
   return (dispatch) => {
     Promise.all(promises)
       .then(() => {
-        fetch('http://52.78.128.96:5000/createNewStory', {
+        fetch('http://localhost:5000/createNewStory', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
