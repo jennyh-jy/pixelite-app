@@ -49,11 +49,11 @@ class App extends Component {
   componentWillMount() {
     const config = {
       apiKey: GOOGLE_FIREBASE_API_KEY,
-      authDomain: 'manager-c381e.firebaseapp.com',
-      databaseURL: 'https://manager-c381e.firebaseio.com',
-      projectId: 'manager-c381e',
+      authDomain: 'pixelite-1505838442092.firebaseapp.com',
+      databaseURL: 'https://pixelite-1505838442092.firebaseio.com',
+      // projectId: 'manager-c381e',
       storageBucket: '',
-      messagingSenderId: '372117802073',
+      messagingSenderId: '779653227449',
     };
     firebase.initializeApp(config);
   }
@@ -66,6 +66,5 @@ class App extends Component {
     );
   }
 }
-
 
 export default App;

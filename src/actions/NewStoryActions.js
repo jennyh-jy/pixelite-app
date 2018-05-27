@@ -18,8 +18,8 @@ import {
 
 const options = {
   keyPrefix: "uploads/",
-  bucket: "pixelite-s3-oregon",
-  region: "us-west-2",
+  bucket: "pixelite-s3",
+  region: "us-east-2",
   accessKey: AWS_ACCESS_KEY,
   secretKey: AWS_SECRET_KEY,
   successActionStatus: 201
@@ -48,8 +48,8 @@ const updateStory = (dispatch, updatedStory) => {
 export const newStoryCreateStory = (props) => {
   const items = _.flattenDeep(Object.values(props.selectedPhotos));
   const promises = items.map(item => saveImageToS3(item.url, props.user));
-  const urls = items.map((item) => `https://s3.us-west-2.amazonaws.com/pixelite-s3-oregon/uploads/${props.user.uid}_AND_${item.url.slice(item.url.lastIndexOf('/') + 1)}`);
-  const coverPhotoUrl =  'https://s3.us-west-2.amazonaws.com/pixelite-s3-oregon/uploads/' + props.user.uid + '_AND_' + props.coverPhotoUrl.slice(props.coverPhotoUrl.lastIndexOf('/') + 1);
+  const urls = items.map((item) => `https://s3.us-east-2.amazonaws.com/pixelite-s3/uploads/${props.user.uid}_AND_${item.url.slice(item.url.lastIndexOf('/') + 1)}`);
+  const coverPhotoUrl =  'https://s3.us-east-2.amazonaws.com/pixelite-s3/uploads/' + props.user.uid + '_AND_' + props.coverPhotoUrl.slice(props.coverPhotoUrl.lastIndexOf('/') + 1);
   const newStory = {
     title: props.titleValue,
     description: props.textValue,

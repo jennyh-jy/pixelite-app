@@ -1,16 +1,14 @@
 const AWS = require('aws-sdk');
-
-AWS.config.region = 'us-west-2';
+AWS.config.loadFromPath('./config.json');
 const rekognition = new AWS.Rekognition();
 
 const reko = (uri, maxLabels, minConfidence) => {
   return new Promise((resolve, reject) => {
     const modifiedUri = uri.slice(uri.lastIndexOf('uploads/'));
-    console.log('modifiedUri ', modifiedUri);
     const params = {
       Image: {
         S3Object: {
-          Bucket: 'pixelite-s3-oregon',
+          Bucket: 'pixelite-s3',
           Name: modifiedUri,
         },
       },

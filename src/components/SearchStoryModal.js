@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, Dimensions, TouchableOpacity, StatusBar } from 'react-native';
 import { Icon, Button, FormLabel, FormInput } from 'react-native-elements';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import axios from 'react-native-axios';
 
 import { GOOGLE_PLACES_API_KEY } from '../../apis';
 

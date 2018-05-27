@@ -23,12 +23,12 @@ exports.updateUserProfile = (req, res) => {
 };
 
 exports.createNewStory = (req, res) => {
-  // max 10 labels from rekognition
-  const MAX = 10;
+  // max 15 labels from rekognition
+  const MAX = 15;
   // over 70 confidence level from rekognition
   const CONFIDENCE = 70;
   const newStory = new StoryNew(req.body.story);
-  console.log('Create newStory (newStory.title): ', newStory.title);
+  console.log('Create newStory: ', newStory.title);
   console.log('newStory: ', JSON.stringify(newStory, undefined, 2));
   newStory.save((error, savedStory) => {
     if (!error) {
@@ -101,13 +101,19 @@ exports.searchQuery = (req, res) => {
       RegExpArr.push(new RegExp(word, 'i'));
     });
     console.log('locations for search : ', RegExpArr);
+    // StoryNew.find({
+    //   $and: [
+    //     { $or : [ { city: { $in: RegExpArr } }, { 'items.location.placeName': { $in: RegExpArr } }, { country: { $in: RegExpArr } } ]},
+    //     { $or : [ { 'items.tag': { $in: searchTags } }, { searchTags : { $in: 'items.tag' } } ] }
+    //   ]
+    // })
     StoryNew.find({ $or: [
       { city: { $in: RegExpArr } },
       { 'items.location.placeName': { $in: RegExpArr } },
       { country: { $in: RegExpArr } }],
     }).where('items.tag').in(searchTags)
       .then((stories) => {
-        console.log('find stories: ', stories);
+        console.log('found stories: ', stories);
         res.send(stories);
       })
       .catch(err => console.log(err));
